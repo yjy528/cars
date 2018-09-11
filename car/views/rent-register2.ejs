@@ -111,8 +111,9 @@
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label for="exampleInputEmail2">客人支付</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control zhifu">
                                     </div>
+                                    <div class="alert alert-danger" role="alert" style="display:none" id="money-a">...</div>
                                     <div class="form-group col-md-3">
                                         <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <input type="button" class="btn btn-default rentcar" value="确定租出">
@@ -253,6 +254,7 @@
                      });
                  }
              }
+
         })
 //获取单个租车信息
         var da=d.all
@@ -280,42 +282,59 @@
             $(".customer").append(opt);
         }
     })
+    $(".zhifu").blur(function(){
+        // alert("1")
+        console.log($(this).val(),$(".total").val())
+        if(parseInt($(this).val())<parseInt($(".total").val())){
+            $("#money-a").css("display","block");
+            $("#money-a").html("支付金额太少");
+            $(".rentcar").attr("disabled","disabled");
+
+        }else{
+            $("#money-a").css("display","none");
+            $('.rentcar').removeAttr("disabled");
+        }
+    })
     // 提交租赁信息
     $(".rentcar").click(function(){
         var sid=$("input[name=radio]:checked").attr("data-id");
         var sname=$("input[name=radio]:checked").attr("data-name");
         console.log(sid);
-        $.get("/updateState/"+sid,function(data){
-            if(data.result == 1){
-                // alert("修改成功！");
-                window.location.reload();
-                $.post("/addRent",{
-                    sid :  $(".every").attr("data-num"),
-                    name : sname,
-                    customer : $(".customer").val(),
-                    long : $(".time").val(),
-                    every : $(".every").val(),
-                    total : $(".total").val(),
-                    date : new Date(),
-                    manager : $(".uname").html(),
-                    state : 1,
-                },function(data){
-                    if(data.result == 1){
-                        alert("提交成功！");
-                        $("input[type=text]").val("");
-                        window.location.reload();
-                    }else if(data.result == -1){
-                        alert("提交失败，该车还未归还");
-                    }else if(data.result == -2){
-                        alert("服务器错误！请联系管理员，怎么联系我也不知道！");
-                    }
-                })
-                // window.location = "/";
-            }else{
-                alert("服务器错误！请联系管理员，怎么联系我也不知道！");
-            }
+        // if($(".zhifu").val()==""||$(".zhifu").val()<$(".total").val()){
+        //     alert("请支付足够的金额")
+        // }else{
+            $.get("/updateState/"+sid,function(data){
+                if(data.result == 1){
+                    // alert("修改成功！");
+                    window.location.reload();
+                    $.post("/addRent",{
+                        sid :  $(".every").attr("data-num"),
+                        name : sname,
+                        customer : $(".customer").val(),
+                        long : $(".time").val(),
+                        every : $(".every").val(),
+                        total : $(".total").val(),
+                        date : new Date(),
+                        manager : $(".uname").html(),
+                        state : 1,
+                    },function(data){
+                        if(data.result == 1){
+                            alert("提交成功！");
+                            $("input[type=text]").val("");
+                            window.location.reload();
+                        }else if(data.result == -1){
+                            alert("提交失败，该车还未归还");
+                        }else if(data.result == -2){
+                            alert("服务器错误！请联系管理员，怎么联系我也不知道！");
+                        }
+                    })
+                    // window.location = "/";
+                }else{
+                    alert("服务器错误！请联系管理员，怎么联系我也不知道！");
+                }
 
-        })
+            })
+        // }
 
     })
 

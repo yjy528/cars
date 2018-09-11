@@ -95,7 +95,6 @@
                         <div class="row">
                             <p class="col-lg-3">
                                 <span>性别：</span>
-
                             </p>
                             <p class="col-lg-8">
                                 <input type="radio" name="sex" value="男">男
@@ -107,13 +106,14 @@
                                 <span>电话：</span>
                             </p>
                             <p class="col-lg-8">
-                                <input type="text" name="phone" class="form-control">
+                                <input type="text" name="phone" class="form-control jianchashoujihao">
                             </p>
+
                         </div>
+                        <p class="checkphone0" style="color:red;"></p>
                         <div class="row">
                             <p class="col-lg-3">
                                 <span>住址：</span>
-
                             </p>
                             <p class="col-lg-8">
                                 <input type="text" name="address" class="form-control">
@@ -124,13 +124,13 @@
                                 <span>身份证：</span>
                             </p>
                             <p class="col-lg-8">
-                                <input type="text" name="idcard" class="form-control">
+                                <input type="text" name="idcard" class="form-control checktel">
                             </p>
                         </div>
+                        <p class="checkphone" style="color:red;"></p>
                         <div class="row">
                             <p class="col-lg-3">
                                 驾照号码：
-
                             </p>
                             <p class="col-lg-8">
                                 <input type="text" name="license" class="form-control">
@@ -290,6 +290,33 @@
     <script src="js/pqgrid.min.js"></script>
     <script src="/js/PageNav.js"></script>
 <script>
+    function isPoneAvailable(str) {
+        var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+        if (!myreg.test(str)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    $(".jianchashoujihao").blur(function(){
+        if(!isPoneAvailable($(this).val())){
+            $(".checkphone0").html("请输入正确的手机号")
+        }
+    })
+    $(".jianchashoujihao").focus(function(){
+            $(".checkphone0").html("")
+    })
+    $(".checktel").blur(function(){
+        if($(this).val().length<11){
+            $(".checkphone").html("请输入18位身份证号码")
+        }
+    })
+    $(".checktel").focus(function(){
+        if($(this).val().length<11){
+            $(".checkphone").html("")
+        }
+    })
     $('#Addbtn').click(function () {
         var str=$('#addtable').serialize();
         console.log(str)
